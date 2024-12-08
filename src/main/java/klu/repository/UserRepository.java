@@ -9,9 +9,10 @@ import klu.model.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-	@Query("select count(U) from User U where U.username=:uname")
-	public int validateUsername(@Param("uname") String uname);
-	
-	@Query("select count(U) from User U where U.username=:uname and U.password=:pwd")
-	public int validateCredentials(@Param("uname") String uname, @Param("pwd") String pwd);
+
+    @Query("select count(u) from User u where u.username = :username")
+    int validateUsername(@Param("username") String username);
+
+    @Query("select count(u) from User u where u.username = :username and u.password = :password")
+    int validateCredentials(@Param("username") String username, @Param("password") String password);
 }

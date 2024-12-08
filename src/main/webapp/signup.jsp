@@ -8,7 +8,7 @@
         /* Style for the body with background image */
         body {
             font-family: Arial, sans-serif;
-            background-image: url('images/pexels-pixabay-247899.jpg'); /* Path to your image */
+            background-image: url('images/bg.jpg'); /* Path to your image */
             background-size: cover; /* Ensures the image covers the whole page */
             background-position: center; /* Centers the image */
             margin: 0;
@@ -77,23 +77,63 @@
     </style>
 </head>
 <body>
-    <div>
-        <h3>Sign Up Page...</h3>
-        <form action="signup" method="post">
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" required>
+    <form id="signupForm">
+        <h3>Sign Up</h3>
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required>
 
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required>
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
 
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
 
-            <label for="confirm_password">Confirm Password:</label>
-            <input type="password" id="confirm_password" name="confirm_password" required>
+        <input type="submit" value="Sign Up">
+    </form>
 
-            <input type="submit" value="Sign Up">
-        </form>
-    </div>
+    <script>
+    const form = document.getElementById("signupForm");
+
+    form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        const password = document.getElementById("password").value;
+
+        // Regular expression to enforce password rules
+        const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
+
+        if (!passwordRegex.test(password)) {
+            alert("Password must contain at least one uppercase letter, one special character, one number, and be at least 8 characters long.");
+            return;
+        }
+
+        const user = {
+            username: document.getElementById("username").value,
+            emailid: document.getElementById("email").value,
+            password: password,
+        };
+
+        try {
+            const response = await fetch("http://localhost:8080/user/register", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(user),
+            });
+
+            const result = await response.text();
+            if (response.ok) {
+                alert(result);
+                window.location.href = "/";
+            } else {
+                alert(`Error: ${result}`);
+            }
+        } catch (error) {
+            alert("Error connecting to the server.");
+        }
+    });
+</script>
+
 </body>
 </html>
